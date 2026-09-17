@@ -1,6 +1,6 @@
 /**
  * @file page.tsx
- * @description Vista de lectura y estudio activo de un tema especifico de una materia.
+ * @description Vista de lectura y estudio activo de un tema especifico de una materia con navegacion ordinal.
  */
 
 import React from 'react';
@@ -9,7 +9,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import { notFound } from 'next/navigation';
 import { CustomMarkdownRenderer } from '@/features/markdown-parser';
-import { getAllSubjects } from '@/features/catalog';
+import { getAllSubjects, getAdjacentTopics, TopicNavButtons } from '@/features/catalog';
 import styles from './TopicPage.module.css';
 
 interface TopicPageProps {
@@ -51,8 +51,20 @@ export default async function TopicPage({ params }: TopicPageProps) {
 
   const { data: frontmatter, content } = matter(fileContent);
 
+  // Obtener la materia actual para calcular la navegacion secuencial ordinal
+  const allSubjects = await getAllSubjects();
+  const currentSubject = allSubjects.find((s) => s.slug === materiaSlug);
+  const navigation = getAdjacentTopics(
+    currentSubject?.topics || [],
+    temaSlug,
+    materiaSlug
+  );
+
   return (
     <div className={styles.wrapper}>
+      {/* Botones de navegacion al inicio del tema */}
+      <TopicNavButtons navigation={navigation} position="top" />
+
       <header className={styles.topicHeader}>
         <div className={styles.breadcrumb}>
           <span>Asignatura: {materiaSlug.replace(/-/g, ' ').toUpperCase()}</span>
@@ -64,6 +76,9 @@ export default async function TopicPage({ params }: TopicPageProps) {
       </header>
 
       <CustomMarkdownRenderer markdown={content} initialViewMode="active_study" />
+
+      {/* Botones de navegacion al final del tema */}
+      <TopicNavButtons navigation={navigation} position="bottom" />
     </div>
   );
 }
