@@ -1,9 +1,10 @@
 /**
  * @file StandardMarkdownContent.tsx
- * @description Renderizador para fragmentos de texto Markdown regular dentro de los bloques.
+ * @description Renderizador para fragmentos de texto Markdown regular con soporte para notacion cientifica, formulas KaTeX y codigo.
  */
 
 import React from 'react';
+import { renderInlineContent } from '../utils/inlineRenderer';
 import styles from './StandardMarkdownContent.module.css';
 
 export interface StandardMarkdownContentProps {
@@ -11,7 +12,7 @@ export interface StandardMarkdownContentProps {
 }
 
 /**
- * Renderiza de forma estructurada los fragmentos de Markdown estandar.
+ * Renderiza de forma estructurada los fragmentos de Markdown estandar con formulas matematicas y quimicas.
  */
 export function StandardMarkdownContent({ content }: StandardMarkdownContentProps) {
   if (!content || content.trim().length === 0) {
@@ -35,7 +36,7 @@ export function StandardMarkdownContent({ content }: StandardMarkdownContentProp
       if (text.length > 0) {
         renderedElements.push(
           <p key={`p-${renderedElements.length}`}>
-            {parseInlineMarkdown(text)}
+            {renderInlineContent(text, `p-${renderedElements.length}`)}
           </p>
         );
       }
@@ -46,7 +47,7 @@ export function StandardMarkdownContent({ content }: StandardMarkdownContentProp
   const flushList = () => {
     if (listBuffer.length > 0 && listType) {
       const items = listBuffer.map((item, idx) => (
-        <li key={`li-${idx}`}>{parseInlineMarkdown(item)}</li>
+        <li key={`li-${idx}`}>{renderInlineContent(item, `li-${idx}`)}</li>
       ));
       if (listType === 'ul') {
         renderedElements.push(<ul key={`ul-${renderedElements.length}`}>{items}</ul>);
@@ -61,6 +62,18 @@ export function StandardMarkdownContent({ content }: StandardMarkdownContentProp
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     const trimmed = line.trim();
+
+    // Deteccion de bloque matematico multilineal $$ ... $$
+    if (trimmed.startsWith('$$') && trimmed.endsWith('$$') && trimmed.length >= 4) {
+      flushParagraph();
+      flushList();
+      renderedElements.push(
+        <div key={`mathblock-${renderedElements.length}`}>
+          {renderInlineContent(trimmed, `mb-${renderedElements.length}`)}
+        </div>
+      );
+      continue;
+    }
 
     // Deteccion de bloque de codigo fenced (```)
     if (trimmed.startsWith('```')) {
@@ -102,7 +115,9 @@ export function StandardMarkdownContent({ content }: StandardMarkdownContentProp
       flushParagraph();
       flushList();
       renderedElements.push(
-        <h3 key={`h3-${renderedElements.length}`}>{trimmed.substring(4)}</h3>
+        <h3 key={`h3-${renderedElements.length}`}>
+          {renderInlineContent(trimmed.substring(4), `h3-${renderedElements.length}`)}
+        </h3>
       );
       continue;
     }
@@ -110,7 +125,9 @@ export function StandardMarkdownContent({ content }: StandardMarkdownContentProp
       flushParagraph();
       flushList();
       renderedElements.push(
-        <h2 key={`h2-${renderedElements.length}`}>{trimmed.substring(3)}</h2>
+        <h2 key={`h2-${renderedElements.length}`}>
+          {renderInlineContent(trimmed.substring(3), `h2-${renderedElements.length}`)}
+        </h2>
       );
       continue;
     }
@@ -143,35 +160,4 @@ export function StandardMarkdownContent({ content }: StandardMarkdownContentProp
   flushList();
 
   return <div className={styles.markdownBody}>{renderedElements}</div>;
-}
-
-/**
- * Parsea marcas inline basicas (**negrita**, `codigo`, *cursiva*).
- */
-function parseInlineMarkdown(text: string): React.ReactNode[] {
-  const parts: React.ReactNode[] = [];
-  const regex = /(\*\*[^*]+\*\*|`[^`]+`|\*[^*]+\*)/g;
-  let lastIndex = 0;
-  let match: RegExpExecArray | null;
-
-  while ((match = regex.exec(text)) !== null) {
-    if (match.index > lastIndex) {
-      parts.push(text.substring(lastIndex, match.index));
-    }
-    const token = match[0];
-    if (token.startsWith('**') && token.endsWith('**')) {
-      parts.push(<strong key={`b-${parts.length}`}>{token.slice(2, -2)}</strong>);
-    } else if (token.startsWith('`') && token.endsWith('`')) {
-      parts.push(<code key={`c-${parts.length}`}>{token.slice(1, -1)}</code>);
-    } else if (token.startsWith('*') && token.endsWith('*')) {
-      parts.push(<em key={`i-${parts.length}`}>{token.slice(1, -1)}</em>);
-    }
-    lastIndex = match.index + token.length;
-  }
-
-  if (lastIndex < text.length) {
-    parts.push(text.substring(lastIndex));
-  }
-
-  return parts.length > 0 ? parts : [text];
 }

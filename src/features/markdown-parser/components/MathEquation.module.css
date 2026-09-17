@@ -1,0 +1,13 @@
+.inlineMath {
+  display: inline;
+  white-space: nowrap;
+}
+
+.blockMath {
+  display: block;
+  margin: var(--spacing-md) 0;
+  text-align: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: var(--spacing-sm) 0;
+}

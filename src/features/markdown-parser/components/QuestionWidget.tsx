@@ -1,6 +1,6 @@
 /**
  * @file QuestionWidget.tsx
- * @description Componente interactivo para responder preguntas en Modo Estudio Activo.
+ * @description Componente interactivo para responder preguntas en Modo Estudio Activo con soporte de notacion cientifica y formulas.
  */
 
 'use client';
@@ -8,6 +8,7 @@
 import React from 'react';
 import { type QuestionAstNode, type StudyViewMode } from '../types/parser.types';
 import { useQuestionInteraction } from '../hooks/useQuestionInteraction';
+import { renderInlineContent } from '../utils/inlineRenderer';
 import styles from './QuestionWidget.module.css';
 
 export interface QuestionWidgetProps {
@@ -41,7 +42,7 @@ export function QuestionWidget({ question, viewMode }: QuestionWidgetProps) {
         <span className={styles.badge}>Reactivo de Autoevaluacion</span>
       </div>
 
-      <p className={styles.prompt}>{question.prompt}</p>
+      <p className={styles.prompt}>{renderInlineContent(question.prompt, `q-${question.id}-p`)}</p>
 
       <ul className={styles.optionsList}>
         {question.options.map((option) => {
@@ -77,7 +78,7 @@ export function QuestionWidget({ question, viewMode }: QuestionWidgetProps) {
                 className={styles.radioInput}
               />
               <label htmlFor={`opt-${option.id}`} className={styles.optionText}>
-                {option.text}
+                {renderInlineContent(option.text, `opt-${option.id}`)}
               </label>
             </li>
           );
@@ -126,7 +127,9 @@ export function QuestionWidget({ question, viewMode }: QuestionWidgetProps) {
       {isSubmitted && isExplanationExpanded && question.explanation && (
         <div className={styles.explanationSection}>
           <div className={styles.explanationTitle}>Explicacion Tecnica:</div>
-          <div className={styles.explanationContent}>{question.explanation}</div>
+          <div className={styles.explanationContent}>
+            {renderInlineContent(question.explanation, `exp-${question.id}`)}
+          </div>
         </div>
       )}
     </div>

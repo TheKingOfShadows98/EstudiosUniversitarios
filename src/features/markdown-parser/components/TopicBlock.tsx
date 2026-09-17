@@ -1,9 +1,10 @@
 /**
  * @file TopicBlock.tsx
- * @description Componente de seccion semantica para representar el bloque [TEMA].
+ * @description Componente de seccion semantica para representar el bloque [TEMA] con soporte para formulas en el titulo.
  */
 
 import React from 'react';
+import { renderInlineContent } from '../utils/inlineRenderer';
 import styles from './TopicBlock.module.css';
 
 export interface TopicBlockProps {
@@ -21,7 +22,7 @@ export function TopicBlock({ id, name, children }: TopicBlockProps) {
       <header className={styles.header}>
         <span className={styles.badge}>Tema Academico</span>
         <h2 id={`title-${id}`} className={styles.title}>
-          {name}
+          {renderInlineContent(name, `topic-title-${id}`)}
         </h2>
       </header>
       <div className={styles.content}>{children}</div>
