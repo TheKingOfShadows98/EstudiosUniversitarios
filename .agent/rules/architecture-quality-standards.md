@@ -5,6 +5,10 @@ description: Reglas y estándares obligatorios de arquitectura (Feature-Driven, 
 
 # Reglas de Arquitectura y Calidad de Software
 
+## 0. Skills y Protocolos Obligatorios
+- **Nuevas Funcionalidades y Refactorizaciones:** Activar y cumplir estrictamente el protocolo de 5 fases de [Skill: Desarrollo Modular](file:///e:/Proyectos/ZoeAndyDev/EstudiosUniversitarios/.agent/skills/desarrollo-modular/SKILL.md) (Type-First, sin `any`, pausas de control, JSDoc y sin emojis).
+- **Resolución de Incidencias:** Cumplir el protocolo de [Skill: Corrección de Errores](file:///e:/Proyectos/ZoeAndyDev/EstudiosUniversitarios/.agent/skills/correccion-de-errores/SKILL.md).
+
 ## 1. Arquitectura y Modularidad
 - Organizar el código según **Feature-Driven Architecture** (`src/features/<feature>/`) y **Shared Components** (`src/shared/`).
 - Aplicar **Puertos y Adaptadores (Hexagonal)** para desacoplar fuentes de datos (`IProgressRepository`, `IContentProvider`).
@@ -29,4 +33,4 @@ description: Reglas y estándares obligatorios de arquitectura (Feature-Driven, 
 ## 5. Pruebas Automatizadas
 - **Pruebas Unitarias e Integración (Vitest + React Testing Library):** Cobertura obligatoria para cálculo de scores de exámenes, validadores de esquemas, hooks de temporizador y adaptadores de datos.
 - **Pruebas End-to-End (Playwright):** Casos obligatorios para navegación del catálogo, ciclo completo de exámenes con temporizador, persistencia en LocalStorage y buscador de contenidos.
-- **Verificación:** Todo cambio debe superar `npm run lint`, `npm run typecheck`, `npm run test` y `npm run test:e2e`.
+- **Verificación:** Todo cambio debe superar `pnpm lint`, `pnpm typecheck` y `pnpm test`.

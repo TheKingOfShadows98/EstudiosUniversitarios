@@ -1,0 +1,59 @@
+.markdownBody {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+}
+
+.markdownBody p {
+  margin-bottom: var(--spacing-md);
+}
+
+.markdownBody h1,
+.markdownBody h2,
+.markdownBody h3,
+.markdownBody h4 {
+  color: var(--color-text-primary);
+  margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-sm);
+  font-weight: 700;
+}
+
+.markdownBody h3 {
+  font-size: 1.25rem;
+}
+
+.markdownBody ul,
+.markdownBody ol {
+  margin-bottom: var(--spacing-md);
+  padding-left: var(--spacing-xl);
+}
+
+.markdownBody li {
+  margin-bottom: var(--spacing-xs);
+}
+
+.markdownBody code {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  background-color: var(--color-bg);
+  padding: 2px var(--spacing-xs);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  color: var(--color-primary);
+}
+
+.markdownBody pre {
+  margin: var(--spacing-md) 0;
+  padding: var(--spacing-md);
+  background-color: #0f172a;
+  color: #f8fafc;
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+}
+
+.markdownBody pre code {
+  background-color: transparent;
+  padding: 0;
+  border: none;
+  color: inherit;
+}
