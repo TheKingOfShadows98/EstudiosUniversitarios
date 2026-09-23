@@ -6,12 +6,13 @@
 
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { type ExamEvaluationResult } from '../types/examEngine.types';
 import { type ExamGamificationReward } from '@/features/user/types/user.types';
 import { computeGradeBracket } from '@/features/user/utils/gamificationEvaluator';
 import { renderInlineContent } from '@/features/markdown-parser/utils/inlineRenderer';
+import { useCelebration } from '@/shared/hooks/useCelebration';
 import { Trophy, Award, CheckCircle2, AlertCircle, ArrowRight } from 'lucide-react';
 import styles from './ExamResultsView.module.css';
 
@@ -34,6 +35,15 @@ export function ExamResultsView({
   onRestart,
 }: ExamResultsViewProps) {
   const { bracket, score10Scale } = computeGradeBracket(result.scorePercentage);
+  const { celebrateExamCompletion } = useCelebration();
+  const hasCelebratedRef = useRef<boolean>(false);
+
+  useEffect(() => {
+    if (!hasCelebratedRef.current) {
+      hasCelebratedRef.current = true;
+      celebrateExamCompletion(bracket);
+    }
+  }, [bracket, celebrateExamCompletion]);
 
   // Mapeo de estilos y etiquetas segun el rango de calificacion
   const bracketConfig = {

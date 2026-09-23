@@ -8,6 +8,7 @@
 import React from 'react';
 import { type QuestionAstNode, type StudyViewMode } from '../types/parser.types';
 import { useQuestionInteraction } from '../hooks/useQuestionInteraction';
+import { useCelebration } from '@/shared/hooks/useCelebration';
 import { renderInlineContent } from '../utils/inlineRenderer';
 import styles from './QuestionWidget.module.css';
 
@@ -30,6 +31,19 @@ export function QuestionWidget({ question, viewMode }: QuestionWidgetProps) {
     resetQuestion,
     toggleExplanation,
   } = useQuestionInteraction(question.options);
+
+  const { celebrateCorrectAnswer } = useCelebration();
+
+  const handleCheckAnswer = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const selected = question.options.find((opt) => opt.id === selectedOptionId);
+    if (selected?.isCorrect) {
+      const rect = event.currentTarget.getBoundingClientRect();
+      const originX = (rect.left + rect.width / 2) / (window.innerWidth || 1);
+      const originY = (rect.top + rect.height / 2) / (window.innerHeight || 1);
+      celebrateCorrectAnswer({ x: originX, y: originY });
+    }
+    submitAnswer();
+  };
 
   // En modo lectura, no se renderizan los widgets de examen para no interrumpir el flujo
   if (viewMode === 'reading') {
@@ -102,7 +116,7 @@ export function QuestionWidget({ question, viewMode }: QuestionWidgetProps) {
             type="button"
             className={styles.submitButton}
             disabled={!selectedOptionId}
-            onClick={submitAnswer}
+            onClick={handleCheckAnswer}
           >
             Comprobar Respuesta
           </button>
