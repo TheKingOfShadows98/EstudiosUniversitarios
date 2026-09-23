@@ -20,6 +20,9 @@ Todo agente de IA o desarrollador que participe en este repositorio debe seguir 
 2. **[Skill: Corrección de Errores (.agent/skills/correccion-de-errores/SKILL.md)](file:///e:/Proyectos/ZoeAndyDev/EstudiosUniversitarios/.agent/skills/correccion-de-errores/SKILL.md)**
    - **Activación:** Obligatoria ante cualquier reporte de bug o error en el sistema.
 
+3. **[Skill: Traductor de Temas (.agent/skills/traductor-de-temas/SKILL.md)](file:///e:/Proyectos/ZoeAndyDev/EstudiosUniversitarios/.agent/skills/traductor-de-temas/SKILL.md)**
+   - **Activación:** Obligatoria al procesar, investigar, estructurar o redactar nuevos temas de aprendizaje y evaluaciones interactivas bajo la convención Markdown personalizada del proyecto.
+
 ---
 
 ## 2. Principios de Arquitectura

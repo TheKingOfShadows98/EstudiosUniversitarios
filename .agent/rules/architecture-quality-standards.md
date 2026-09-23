@@ -8,6 +8,7 @@ description: Reglas y estándares obligatorios de arquitectura (Feature-Driven, 
 ## 0. Skills y Protocolos Obligatorios
 - **Nuevas Funcionalidades y Refactorizaciones:** Activar y cumplir estrictamente el protocolo de 5 fases de [Skill: Desarrollo Modular](file:///e:/Proyectos/ZoeAndyDev/EstudiosUniversitarios/.agent/skills/desarrollo-modular/SKILL.md) (Type-First, sin `any`, pausas de control, JSDoc y sin emojis).
 - **Resolución de Incidencias:** Cumplir el protocolo de [Skill: Corrección de Errores](file:///e:/Proyectos/ZoeAndyDev/EstudiosUniversitarios/.agent/skills/correccion-de-errores/SKILL.md).
+- **Generación y Estructuración de Contenido:** Cumplir el protocolo de [Skill: Traductor de Temas](file:///e:/Proyectos/ZoeAndyDev/EstudiosUniversitarios/.agent/skills/traductor-de-temas/SKILL.md) para redactar temas pedagógicos, definiciones y 5 reactivos por subtema bajo la convención Markdown personalizada.
 
 ## 1. Arquitectura y Modularidad
 - Organizar el código según **Feature-Driven Architecture** (`src/features/<feature>/`) y **Shared Components** (`src/shared/`).
