@@ -8,6 +8,7 @@
   border-radius: var(--radius-md);
   text-decoration: none;
   transition: all var(--transition-fast);
+  gap: var(--spacing-sm);
 }
 
 .item:hover {
@@ -16,15 +17,59 @@
   transform: translateX(4px);
 }
 
+/* Estado Verde: Completado */
+.itemCompleted {
+  background-color: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.itemCompleted:hover {
+  background-color: #dcfce7;
+  border-color: #86efac;
+}
+
+/* Estado Amarillo: Pendiente de Medalla de Valor */
+.itemPendingMedal {
+  background-color: #fffbeb;
+  border-color: #fde68a;
+}
+
+.itemPendingMedal:hover {
+  background-color: #fef3c7;
+  border-color: #fcd34d;
+}
+
+.leftCol {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  overflow: hidden;
+}
+
+.completedIcon {
+  color: #16a34a;
+  flex-shrink: 0;
+}
+
+.medalIcon {
+  color: #d97706;
+  flex-shrink: 0;
+}
+
 .title {
   font-size: 0.9375rem;
   font-weight: 600;
   color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .metrics {
   display: flex;
   gap: var(--spacing-xs);
+  flex-shrink: 0;
+  align-items: center;
 }
 
 .badge {
@@ -35,4 +80,24 @@
   background-color: var(--color-surface);
   color: var(--color-text-secondary);
   border: 1px solid var(--color-border);
+}
+
+.badgeSuccess {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px var(--spacing-xs);
+  border-radius: var(--radius-sm);
+  background-color: #dcfce7;
+  color: #15803d;
+  border: 1px solid #86efac;
+}
+
+.badgeMedal {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px var(--spacing-xs);
+  border-radius: var(--radius-sm);
+  background-color: #fef3c7;
+  color: #b45309;
+  border: 1px solid #fcd34d;
 }

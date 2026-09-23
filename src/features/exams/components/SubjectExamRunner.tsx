@@ -1,13 +1,15 @@
 /**
  * @file SubjectExamRunner.tsx
- * @description Contenedor interactivo para la realizacion del examen general de una materia.
+ * @description Contenedor interactivo para la realizacion del examen general de una materia y registro de gamificacion.
  */
 
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { type SubjectExamQuestion } from '../types/examEngine.types';
+import { type ExamGamificationReward } from '@/features/user/types/user.types';
 import { useSubjectExamSession } from '../hooks/useSubjectExamSession';
+import { useUserSession } from '@/features/user/hooks/useUserSession';
 import { renderInlineContent } from '@/features/markdown-parser/utils/inlineRenderer';
 import { ExamResultsView } from './ExamResultsView';
 import styles from './SubjectExamRunner.module.css';
@@ -28,6 +30,10 @@ export function SubjectExamRunner({
   questionsPool,
   maxQuestionsLimit = 20,
 }: SubjectExamRunnerProps) {
+  const { recordExamResult } = useUserSession();
+  const [gamificationReward, setGamificationReward] = useState<ExamGamificationReward | null>(null);
+  const hasProcessedReward = useRef<boolean>(false);
+
   const {
     questions,
     currentQuestion,
@@ -48,6 +54,21 @@ export function SubjectExamRunner({
     restartExam,
   } = useSubjectExamSession(questionsPool, maxQuestionsLimit);
 
+  // Registro de gamificacion al completar el examen
+  useEffect(() => {
+    if (isSubmitted && result && !hasProcessedReward.current) {
+      hasProcessedReward.current = true;
+      const reward = recordExamResult(materiaSlug, result.allQuestionsReview, result.scorePercentage);
+      setGamificationReward(reward);
+    }
+  }, [isSubmitted, result, materiaSlug, recordExamResult]);
+
+  const handleRestart = () => {
+    hasProcessedReward.current = false;
+    setGamificationReward(null);
+    restartExam();
+  };
+
   // Si no hay preguntas disponibles en la materia
   if (totalQuestions === 0) {
     return (
@@ -62,14 +83,15 @@ export function SubjectExamRunner({
     );
   }
 
-  // Si ya se entrego el examen, mostramos la pantalla de resultados con remediacion
+  // Si ya se entrego el examen, mostramos la pantalla de resultados con remediacion y gamificacion
   if (isSubmitted && result) {
     return (
       <ExamResultsView
         result={result}
         materiaName={materiaName}
         materiaSlug={materiaSlug}
-        onRestart={restartExam}
+        reward={gamificationReward}
+        onRestart={handleRestart}
       />
     );
   }

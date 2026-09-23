@@ -1,10 +1,13 @@
 /**
  * @file Navbar.tsx
- * @description Barra de navegacion principal de la aplicacion.
+ * @description Barra de navegacion principal de la aplicacion con perfil de estudiante y monedas.
  */
+
+'use client';
 
 import React from 'react';
 import Link from 'next/link';
+import { UserProfileWidget } from '@/features/user/components/UserProfileWidget/UserProfileWidget';
 import styles from './Navbar.module.css';
 
 /**
@@ -18,7 +21,7 @@ export function Navbar() {
           <span>Estudios<span className={styles.brandAccent}>Universitarios</span></span>
         </Link>
 
-        <nav aria-label="Navegacion principal">
+        <nav aria-label="Navegacion principal" className={styles.navWrapper}>
           <ul className={styles.navLinks}>
             <li>
               <Link href="/" className={styles.navLink}>
@@ -31,6 +34,8 @@ export function Navbar() {
               </Link>
             </li>
           </ul>
+
+          <UserProfileWidget variant="compact" />
         </nav>
       </div>
     </header>

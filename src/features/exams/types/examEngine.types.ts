@@ -4,6 +4,7 @@
  */
 
 import { type QuestionOption, type QuestionType } from '@/features/markdown-parser/types/parser.types';
+import { type ExamQuestionReviewItem } from '@/features/user/types/user.types';
 
 /**
  * Reactivo enriquecido con el tema de origen para guiar la remediacion pedagogica.
@@ -66,4 +67,5 @@ export interface ExamEvaluationResult {
   readonly completedAt: string;
   readonly failedQuestions: readonly FailedQuestionReview[];
   readonly remediationTopics: readonly RemediationTopicRef[];
+  readonly allQuestionsReview: readonly ExamQuestionReviewItem[];
 }

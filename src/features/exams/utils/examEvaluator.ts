@@ -1,6 +1,6 @@
 /**
  * @file examEvaluator.ts
- * @description Utilidad pura para la calificacion de examenes y compilacion de temas de remediacion.
+ * @description Utilidad pura para la calificacion de examenes, compilacion de temas de remediacion y revision ordinal de preguntas.
  */
 
 import {
@@ -9,14 +9,16 @@ import {
   type FailedQuestionReview,
   type RemediationTopicRef,
 } from '../types/examEngine.types';
+import { type ExamQuestionReviewItem } from '@/features/user/types/user.types';
 
 /**
- * Evalua las respuestas enviadas por el usuario, computa el porcentaje de aciertos y agrupa temas a repasar.
+ * Evalua las respuestas enviadas por el usuario, computa el porcentaje de aciertos, agrupa temas a repasar
+ * y genera la lista ordinal completa para la revision detallada con feedback.
  *
  * @param questions - Lista de preguntas presentes en la sesion de examen.
  * @param answers - Mapa de respuestas seleccionadas por el estudiante (questionId -> optionId).
  * @param passingPercentage - Porcentaje minimo para aprobar (por defecto 70%).
- * @returns Resultado formal de la evaluacion con enlaces de remediacion.
+ * @returns Resultado formal de la evaluacion con enlaces de remediacion y revision de todas las preguntas.
  */
 export function evaluateExamSession(
   questions: readonly SubjectExamQuestion[],
@@ -32,14 +34,16 @@ export function evaluateExamSession(
       completedAt: new Date().toISOString(),
       failedQuestions: [],
       remediationTopics: [],
+      allQuestionsReview: [],
     };
   }
 
   let correctCount = 0;
   const failedQuestions: FailedQuestionReview[] = [];
+  const allQuestionsReview: ExamQuestionReviewItem[] = [];
   const remediationMap = new Map<string, { title: string; materiaSlug: string; count: number }>();
 
-  for (const question of questions) {
+  questions.forEach((question, idx) => {
     const selectedOptionId = answers[question.id] ?? null;
     const isCorrect = selectedOptionId === question.correctOptionId;
 
@@ -65,7 +69,20 @@ export function evaluateExamSession(
         });
       }
     }
-  }
+
+    allQuestionsReview.push({
+      questionId: question.id,
+      orderIndex: idx,
+      prompt: question.prompt,
+      topicSlug: question.topicSlug,
+      topicTitle: question.topicTitle,
+      materiaSlug: question.materiaSlug,
+      selectedOptionId,
+      correctOptionId: question.correctOptionId,
+      isCorrect,
+      explanation: question.explanation,
+    });
+  });
 
   const scorePercentage = Math.round((correctCount / questions.length) * 100);
   const passed = scorePercentage >= passingPercentage;
@@ -90,5 +107,6 @@ export function evaluateExamSession(
     completedAt: new Date().toISOString(),
     failedQuestions,
     remediationTopics,
+    allQuestionsReview,
   };
 }

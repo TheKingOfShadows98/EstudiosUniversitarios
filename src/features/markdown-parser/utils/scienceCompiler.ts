@@ -23,6 +23,7 @@ export function compileScientificExpression(
 ): CompiledScientificExpression {
   const isDisplayMode = options.displayMode ?? false;
   const rawClean = expression.trim();
+  const throwOnError = options.throwOnError ?? true;
 
   // Deteccion del tipo de expresion cientifica
   let exprType: ScientificExpressionType = isDisplayMode ? 'block_math' : 'inline_math';
@@ -35,7 +36,7 @@ export function compileScientificExpression(
   try {
     const renderedHtml = katex.renderToString(rawClean, {
       displayMode: isDisplayMode,
-      throwOnError: false,
+      throwOnError,
       output: options.output ?? 'htmlAndMathml',
       strict: false,
     });

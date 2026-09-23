@@ -11,6 +11,7 @@ import { useCatalogFilter } from '../hooks/useCatalogFilter';
 import { LandingHero } from './LandingHero';
 import { CatalogFilterBar } from './CatalogFilterBar';
 import { SubjectGrid } from './SubjectGrid';
+import { UserProfileWidget } from '@/features/user/components/UserProfileWidget/UserProfileWidget';
 import styles from './LandingCatalogView.module.css';
 
 export interface LandingCatalogViewProps {
@@ -18,7 +19,7 @@ export interface LandingCatalogViewProps {
 }
 
 /**
- * Vista principal de la Landing Page que conecta el hero, barra de busqueda y cuadricula.
+ * Vista principal de la Landing Page que conecta el hero, perfil de estudiante, barra de busqueda y cuadricula.
  */
 export function LandingCatalogView({ initialSubjects }: LandingCatalogViewProps) {
   const {
@@ -52,6 +53,8 @@ export function LandingCatalogView({ initialSubjects }: LandingCatalogViewProps)
         totalTopics={globalMetrics.totalTopics}
         totalQuestions={globalMetrics.totalQuestions}
       />
+
+      <UserProfileWidget variant="hero" />
 
       <CatalogFilterBar
         searchQuery={searchQuery}

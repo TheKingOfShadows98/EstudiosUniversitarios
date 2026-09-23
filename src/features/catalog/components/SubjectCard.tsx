@@ -1,12 +1,17 @@
 /**
  * @file SubjectCard.tsx
- * @description Tarjeta representativa de una asignatura academica, sus temas vinculados y acceso directo a su examen general.
+ * @description Tarjeta representativa de una asignatura academica, sus temas vinculados,
+ * indicador de donde se dejo la materia y acceso directo a su examen general.
  */
+
+'use client';
 
 import React from 'react';
 import Link from 'next/link';
 import { type Subject } from '../types/catalog.types';
 import { TopicBadgeItem } from './TopicBadgeItem';
+import { useUserSession } from '@/features/user/hooks/useUserSession';
+import { BookOpen } from 'lucide-react';
 import styles from './SubjectCard.module.css';
 
 export interface SubjectCardProps {
@@ -17,14 +22,32 @@ export interface SubjectCardProps {
  * Tarjeta de asignatura con descripcion, lista de temas y boton para rendir el examen directamente.
  */
 export function SubjectCard({ subject }: SubjectCardProps) {
+  const { getLastVisitedTopic } = useUserSession();
+  const lastTopicSlug = getLastVisitedTopic(subject.slug);
+  const lastTopic = subject.topics.find((t) => t.slug === lastTopicSlug);
+
   const examHref = `/materias/${subject.slug}/examen`;
 
   return (
     <article className={styles.card} aria-labelledby={`subject-${subject.slug}`}>
       <header className={styles.header}>
-        <span className={styles.specialtyBadge}>
-          {subject.especialidadSlug.replace(/-/g, ' ')}
-        </span>
+        <div className={styles.headerTop}>
+          <span className={styles.specialtyBadge}>
+            {subject.especialidadSlug.replace(/-/g, ' ')}
+          </span>
+
+          {lastTopic && (
+            <Link
+              href={`/materias/${subject.slug}/${lastTopic.slug}`}
+              className={styles.resumeBadge}
+              title="Continuar en el ultimo tema estudiado"
+            >
+              <BookOpen size={12} aria-hidden="true" />
+              <span>Continuar: {lastTopic.title}</span>
+            </Link>
+          )}
+        </div>
+
         <h2 id={`subject-${subject.slug}`} className={styles.name}>
           {subject.name}
         </h2>

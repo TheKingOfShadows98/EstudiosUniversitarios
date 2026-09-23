@@ -15,6 +15,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--spacing-md);
 }
 
 .brand {
@@ -25,10 +26,17 @@
   font-weight: 800;
   color: var(--color-text-primary);
   text-decoration: none;
+  flex-shrink: 0;
 }
 
 .brandAccent {
   color: var(--color-primary);
+}
+
+.navWrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
 }
 
 .navLinks {
@@ -47,4 +55,10 @@
 
 .navLink:hover {
   color: var(--color-primary);
+}
+
+@media (max-width: 640px) {
+  .navLinks {
+    display: none;
+  }
 }

@@ -1,6 +1,6 @@
 /**
  * @file page.tsx
- * @description Vista de lectura y estudio activo de un tema especifico de una materia con navegacion ordinal.
+ * @description Vista de lectura y estudio activo de un tema especifico de una materia con navegacion ordinal y registro de progreso.
  */
 
 import React from 'react';
@@ -10,6 +10,7 @@ import matter from 'gray-matter';
 import { notFound } from 'next/navigation';
 import { CustomMarkdownRenderer } from '@/features/markdown-parser';
 import { getAllSubjects, getAdjacentTopics, TopicNavButtons } from '@/features/catalog';
+import { TopicTrackerEffect } from '@/features/user';
 import styles from './TopicPage.module.css';
 
 interface TopicPageProps {
@@ -62,6 +63,9 @@ export default async function TopicPage({ params }: TopicPageProps) {
 
   return (
     <div className={styles.wrapper}>
+      {/* Rastrear el tema actual para recordar donde se dejo la asignatura */}
+      <TopicTrackerEffect materiaSlug={materiaSlug} temaSlug={temaSlug} />
+
       {/* Botones de navegacion al inicio del tema */}
       <TopicNavButtons navigation={navigation} position="top" />
 
