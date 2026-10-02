@@ -6,9 +6,11 @@
 // Tipos
 export * from './types/catalog.types';
 export * from './types/navigation.types';
+export * from './types/contentDate.types';
 
 // Servicios y Utilidades
 export { getAllSubjects } from './services/contentScanner';
+export { getContentLastModified } from './services/contentDateService';
 export { filterSubjects } from './utils/catalogFilter';
 export { getAdjacentTopics } from './utils/adjacentTopics';
 
